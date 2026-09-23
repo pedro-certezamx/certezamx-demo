@@ -47,7 +47,7 @@ export default function Constancia() {
             </p>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-xs text-gray-500">Comprador</span>
+                <span className="text-xs text-gray-500">Quien Compra</span>
                 <span className="text-xs font-medium text-gray-800">{ORDEN.cliente.nombre}</span>
               </div>
               <div className="flex justify-between">
@@ -130,7 +130,7 @@ export default function Constancia() {
           {/* Alcance */}
           <div className="px-6 py-4 border-t-2 border-dashed" style={{ borderColor: "#e5e7eb" }}>
             <p className="text-xs text-gray-500 leading-relaxed">
-              <strong>Alcance de esta Constancia:</strong> Este documento certifica que CertezaMX documentó el intercambio de información y evidencias entre las partes mencionadas. <strong>NO certifica la autenticidad del pago ni el valor del mismo.</strong> CertezaMX no procesa, valida ni custodia pagos. Solo documenta declaraciones y evidencias proporcionadas por las partes.
+              <strong>Alcance de esta Constancia:</strong> Este documento respalda que CertezaMX documentó el intercambio de información y evidencias entre las partes mencionadas. <strong>NO certifica la autenticidad del pago ni el valor del mismo.</strong> CertezaMX no procesa, valida ni custodia pagos. Solo documenta declaraciones y evidencias proporcionadas por las partes.
             </p>
           </div>
 

@@ -19,9 +19,9 @@ export default function Declarar() {
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Detalles de la orden</p>
         {[
           { label: "Folio", valor: ORDEN.folio },
-          { label: "Cliente", valor: ORDEN.cliente.nombre },
+          { label: "Comprador", valor: ORDEN.cliente.nombre },
           { label: "Producto", valor: ORDEN.producto.nombre },
-          { label: "Monto declarado por cliente", valor: `$${ORDEN.valor}.00 MXN` },
+          { label: "Monto declarado por el comprador", valor: `$${ORDEN.valor}.00 MXN` },
           { label: "Destinatario de la entrega", valor: ORDEN.destinatario.nombre },
           { label: "Municipio", valor: ORDEN.destinatario.municipio },
         ].map((item) => (

@@ -23,7 +23,7 @@ export default function DemoLayout({ children, paso, totalPasos, titulo, esProve
         )}
       </header>
 
-      {/* Barra de progreso (solo para flujo cliente, no proveedor) */}
+      {/* Barra de progreso (solo para flujo comprador, no proveedor) */}
       {!esProveedor && paso && (
         <div style={{ backgroundColor: "#1A3A5C" }} className="px-4 pb-4">
           <div className="flex items-center justify-between max-w-lg mx-auto">

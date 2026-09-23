@@ -43,7 +43,7 @@ export default function ProveedorDashboard() {
 
           <div className="p-2 rounded-lg bg-amber-50 border border-amber-100 mb-3">
             <p className="text-xs text-amber-800">
-              📱 El cliente declaró haber pagado. Revisa tu cuenta bancaria y declara la recepción.
+              📱 El comprador declaró haber pagado. Revisa tu cuenta bancaria y declara la recepción.
             </p>
           </div>
 
