@@ -80,7 +80,7 @@ export default function Orden() {
 
       <div className="p-3 rounded-lg bg-amber-50 border border-amber-200 mb-4">
         <p className="text-xs text-amber-800">
-          ℹ️ Al confirmar, CertezaMX registrará esta orden. El pago lo realizarás directamente al proveedor con la institución financiera regulada de tu elección.
+          ℹ️ Al confirmar, CertezaMX registrará esta orden. El pago lo realizarás directamente al proveedor, por los medios que él acepte.
         </p>
       </div>
 

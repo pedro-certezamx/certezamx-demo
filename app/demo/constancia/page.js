@@ -67,10 +67,6 @@ export default function Constancia() {
                 <span className="text-xs font-medium text-gray-800">{ORDEN.cliente.nombre}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-xs text-gray-500">WhatsApp comprador</span>
-                <span className="text-xs font-medium text-gray-800">{ORDEN.cliente.whatsapp}</span>
-              </div>
-              <div className="flex justify-between">
                 <span className="text-xs text-gray-500">Proveedor</span>
                 <span className="text-xs font-medium text-gray-800">{PROVEEDOR.nombre}</span>
               </div>

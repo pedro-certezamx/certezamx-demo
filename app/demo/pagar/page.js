@@ -23,7 +23,7 @@ export default function Pagar() {
     <DemoLayout paso={3} titulo="Realiza tu pago">
       <div className="p-3 rounded-lg bg-blue-50 border border-blue-100 mb-4">
         <p className="text-sm text-blue-800">
-          Realiza una transferencia directa a la cuenta bancaria de <strong>{PROVEEDOR.nombre}</strong> usando la institución financiera regulada de tu elección.
+          Realiza tu pago directamente a <strong>{PROVEEDOR.nombre}</strong>, por los medios que él acepte.
         </p>
       </div>
 
@@ -43,6 +43,8 @@ export default function Pagar() {
               { label: "Banco", valor: PROVEEDOR.banco },
               { label: "CLABE interbancaria", valor: PROVEEDOR.clabe },
               { label: "Titular de la cuenta", valor: PROVEEDOR.titular },
+              { label: "Número de cuenta", valor: PROVEEDOR.cuenta },
+              { label: "Número de tarjeta", valor: PROVEEDOR.numero_tarjeta },
               { label: "Monto a transferir", valor: `$${formatearPrecio(carrito.valorTotal)} MXN` },
               { label: "Concepto sugerido", valor: `Orden ${ORDEN.folio}` },
             ].map((item) => (
