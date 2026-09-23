@@ -51,7 +51,7 @@ export const PRODUCTOS = [
     nombre: "Arreglo Floral Grande",
     precio: 600,
     unidad_medida: "arreglo",
-    foto: "https://images.unsplash.com/photo-1487530811015-780c83c9bcbc?w=400&h=300&fit=crop",
+    foto: "/productos/arreglo-floral-grande.jpg",
     descripcion: "Arreglo premium con flores de temporada, base de cerámica incluida.",
   },
   {
@@ -59,7 +59,7 @@ export const PRODUCTOS = [
     nombre: "Ramo de Rosas",
     precio: 450,
     unidad_medida: "ramo",
-    foto: "https://images.unsplash.com/photo-1548094879-7e4c87c3b88b?w=400&h=300&fit=crop",
+    foto: "/productos/ramo-rosas.jpg",
     descripcion: "24 rosas rojas frescas con papel kraft y listón.",
   },
   {
@@ -67,7 +67,7 @@ export const PRODUCTOS = [
     nombre: "Arreglo de Temporada",
     precio: 380,
     unidad_medida: "arreglo",
-    foto: "https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?w=400&h=300&fit=crop",
+    foto: "/productos/arreglo-temporada.jpg",
     descripcion: "Flores de temporada seleccionadas, presentación rústica.",
   },
   {
@@ -75,7 +75,7 @@ export const PRODUCTOS = [
     nombre: "Centro de Mesa",
     precio: 520,
     unidad_medida: "pieza",
-    foto: "https://images.unsplash.com/photo-1559291163-87e6ac1e1e60?w=400&h=300&fit=crop",
+    foto: "/productos/centro-mesa.jpg",
     descripcion: "Arreglo circular ideal para eventos y celebraciones.",
   },
 ];

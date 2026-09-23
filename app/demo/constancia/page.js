@@ -117,7 +117,7 @@ export default function Constancia() {
               style={{ borderColor: "#C8890A" }}
             >
               <img
-                src="https://images.unsplash.com/photo-1487530811015-780c83c9bcbc?w=400&h=250&fit=crop"
+                src="/productos/evidencia-entrega.jpg"
                 alt="Foto de evidencia de entrega"
                 className="w-full h-44 object-cover"
               />
