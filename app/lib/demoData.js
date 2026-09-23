@@ -3,10 +3,13 @@ export const PROVEEDOR = {
   verificado: true,
   municipio: "Puebla, Puebla",
   calificacion: 4.8,
-  banco: "BBVA México",
-  clabe: "012 180 0012345678 90",
+  banco: "Banco de Ejemplo",
+  clabe: "999 180 0012345678 90",
   titular: "Florería Puebla S.A. de C.V.",
-  whatsapp: "+52 222 555 0199",
+  whatsapp: "+52 222 000 0000",
+  giro: "Floristería",
+  cuenta: "0123456789",
+  numero_tarjeta: "1234 5678 9012 3456",
 };
 
 export const PRODUCTOS = [
