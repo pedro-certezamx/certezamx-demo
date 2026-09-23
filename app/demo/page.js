@@ -1,8 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { PROVEEDORES } from "../lib/demoData";
+import { limpiarCarrito } from "../lib/carrito";
 
 const ESTADOS_PILOTO = ["Puebla", "Tlaxcala"];
 
@@ -58,6 +59,10 @@ export default function DemoHome() {
   const [filtroGiro, setFiltroGiro] = useState("");
   const [filtroMunicipio, setFiltroMunicipio] = useState("");
   const [filtroEstado, setFiltroEstado] = useState("");
+
+  useEffect(() => {
+    limpiarCarrito();
+  }, []);
 
   const proveedoresFiltrados = PROVEEDORES.filter((p) => {
     const matchGiro = p.giro.toLowerCase().includes(filtroGiro.toLowerCase());

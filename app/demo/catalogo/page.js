@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import DemoLayout from "../../components/DemoLayout";
 import { PRODUCTOS, PROVEEDOR } from "../../lib/demoData";
+import { guardarCarrito } from "../../lib/carrito";
 
 function formatearPrecio(valor) {
   return Number(valor).toLocaleString("es-MX", {
@@ -85,6 +86,19 @@ export default function Catalogo() {
     0
   );
 
+  const continuar = () => {
+    const productosEnCarrito = PRODUCTOS.filter((p) => (cantidades[p.id] || 0) > 0).map((p) => ({
+      id: p.id,
+      nombre: p.nombre,
+      precio: p.precio,
+      unidad_medida: p.unidad_medida,
+      cantidad: cantidades[p.id],
+    }));
+
+    guardarCarrito({ productos: productosEnCarrito, valorTotal, totalArticulos });
+    router.push("/demo/orden");
+  };
+
   return (
     <DemoLayout paso={1}>
       <p className="text-xs uppercase tracking-wide text-gray-400 font-semibold mb-1">
@@ -113,7 +127,7 @@ export default function Catalogo() {
           </p>
           <button
             type="button"
-            onClick={() => router.push("/demo/orden")}
+            onClick={continuar}
             className="w-full py-2.5 px-4 rounded-lg font-semibold text-white text-sm"
             style={{ backgroundColor: "#1A3A5C" }}
           >

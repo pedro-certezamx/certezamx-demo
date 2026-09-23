@@ -1,7 +1,9 @@
 "use client";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import DemoLayout from "../../components/DemoLayout";
 import { ORDEN, PROVEEDOR } from "../../lib/demoData";
+import { obtenerCarrito } from "../../lib/carrito";
 
 function Campo({ label, valor }) {
   return (
@@ -19,7 +21,20 @@ function Campo({ label, valor }) {
   );
 }
 
+function formatearPrecio(valor) {
+  return Number(valor).toLocaleString("es-MX", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
 export default function Orden() {
+  const [carrito, setCarrito] = useState(null);
+
+  useEffect(() => {
+    setCarrito(obtenerCarrito());
+  }, []);
+
   return (
     <DemoLayout paso={2} titulo="Confirma tu orden">
       <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100 mb-4">
@@ -34,14 +49,33 @@ export default function Orden() {
 
       <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100 mb-4">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Resumen del pedido</p>
-        <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-700">{ORDEN.producto.nombre}</span>
-          <span className="font-bold" style={{ color: "#C8890A" }}>${ORDEN.producto.precio} MXN</span>
-        </div>
-        <div className="flex justify-between items-center mt-1">
-          <span className="text-sm text-gray-500">Proveedor</span>
-          <span className="text-sm text-gray-700">{PROVEEDOR.nombre}</span>
-        </div>
+        {!carrito ? (
+          <div className="space-y-2 animate-pulse">
+            <div className="h-4 bg-gray-100 rounded w-3/4" />
+            <div className="h-4 bg-gray-100 rounded w-1/2" />
+          </div>
+        ) : (
+          <>
+            {carrito.productos.map((producto) => (
+              <div key={producto.id} className="flex justify-between items-center mb-1">
+                <span className="text-sm text-gray-700">
+                  {producto.nombre} <span className="text-gray-400">× {producto.cantidad}</span>
+                </span>
+                <span className="text-sm font-medium text-gray-800">
+                  ${formatearPrecio(producto.precio * producto.cantidad)} MXN
+                </span>
+              </div>
+            ))}
+            <div className="flex justify-between items-center mt-2 pt-2 border-t border-gray-100">
+              <span className="text-sm font-semibold" style={{ color: "#1A3A5C" }}>Total</span>
+              <span className="font-bold" style={{ color: "#C8890A" }}>${formatearPrecio(carrito.valorTotal)} MXN</span>
+            </div>
+            <div className="flex justify-between items-center mt-2">
+              <span className="text-sm text-gray-500">Proveedor</span>
+              <span className="text-sm text-gray-700">{PROVEEDOR.nombre}</span>
+            </div>
+          </>
+        )}
       </div>
 
       <div className="p-3 rounded-lg bg-amber-50 border border-amber-200 mb-4">
@@ -50,14 +84,16 @@ export default function Orden() {
         </p>
       </div>
 
-      <Link href="/demo/pagar">
-        <button
-          className="w-full py-3 rounded-lg font-bold text-white"
-          style={{ backgroundColor: "#C8890A" }}
-        >
-          Confirmar orden →
-        </button>
-      </Link>
+      {carrito && (
+        <Link href="/demo/pagar">
+          <button
+            className="w-full py-3 rounded-lg font-bold text-white"
+            style={{ backgroundColor: "#C8890A" }}
+          >
+            Confirmar orden →
+          </button>
+        </Link>
+      )}
     </DemoLayout>
   );
 }

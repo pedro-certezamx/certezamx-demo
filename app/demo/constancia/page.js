@@ -1,8 +1,24 @@
+"use client";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ORDEN, PROVEEDOR } from "../../lib/demoData";
+import { obtenerCarrito } from "../../lib/carrito";
+
+function formatearPrecio(valor) {
+  return Number(valor).toLocaleString("es-MX", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
 
 export default function Constancia() {
+  const [carrito, setCarrito] = useState(null);
+
+  useEffect(() => {
+    setCarrito(obtenerCarrito());
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: "#F8F9FA" }}>
       {/* Header */}
@@ -74,20 +90,33 @@ export default function Constancia() {
             <p className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: "#1A3A5C" }}>
               Orden documentada
             </p>
-            <div className="space-y-2">
-              <div className="flex justify-between">
+            {!carrito ? (
+              <div className="space-y-2 animate-pulse">
+                <div className="h-3 bg-gray-100 rounded w-3/4" />
+                <div className="h-3 bg-gray-100 rounded w-1/2" />
+                <div className="h-3 bg-gray-100 rounded w-2/3" />
+              </div>
+            ) : (
+              <div className="space-y-2">
                 <span className="text-xs text-gray-500">Descripción</span>
-                <span className="text-xs font-medium text-gray-800">{ORDEN.producto.nombre}</span>
+                {carrito.productos.map((producto) => (
+                  <div key={producto.id} className="flex justify-between">
+                    <span className="text-xs text-gray-700">{producto.nombre} × {producto.cantidad}</span>
+                    <span className="text-xs font-medium text-gray-800">
+                      ${formatearPrecio(producto.precio * producto.cantidad)} MXN
+                    </span>
+                  </div>
+                ))}
+                <div className="flex justify-between pt-1 border-t border-gray-100">
+                  <span className="text-xs font-semibold text-gray-500">Valor declarado</span>
+                  <span className="text-xs font-bold" style={{ color: "#C8890A" }}>${formatearPrecio(carrito.valorTotal)} MXN</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-xs text-gray-500">Fecha de orden</span>
+                  <span className="text-xs font-medium text-gray-800">{ORDEN.fecha}</span>
+                </div>
               </div>
-              <div className="flex justify-between">
-                <span className="text-xs text-gray-500">Valor declarado</span>
-                <span className="text-xs font-bold" style={{ color: "#C8890A" }}>${ORDEN.valor}.00 MXN</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-xs text-gray-500">Fecha de orden</span>
-                <span className="text-xs font-medium text-gray-800">{ORDEN.fecha}</span>
-              </div>
-            </div>
+            )}
           </div>
 
           {/* Sección evidencia */}
