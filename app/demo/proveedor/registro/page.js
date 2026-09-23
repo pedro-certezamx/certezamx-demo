@@ -54,7 +54,7 @@ export default function RegistroProveedor() {
 
   const handleEnviar = () => {
     setEnviado(true);
-    setTimeout(() => router.push("/demo/proveedor"), 3000);
+    setTimeout(() => router.push("/demo/proveedor/catalogo"), 3000);
   };
 
   return (
