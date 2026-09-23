@@ -1,16 +1,49 @@
 export const PROVEEDOR = {
-  nombre: "Florería Puebla",
+  nombre: "Florería Ejemplo",
   verificado: true,
   municipio: "Puebla, Puebla",
   calificacion: 4.8,
   banco: "Banco de Ejemplo",
   clabe: "999 180 0012345678 90",
-  titular: "Florería Puebla S.A. de C.V.",
+  titular: "Florería Ejemplo S.A. de C.V.",
   whatsapp: "+52 222 000 0000",
   giro: "Floristería",
   cuenta: "0123456789",
   numero_tarjeta: "1234 5678 9012 3456",
 };
+
+export const PROVEEDORES = [
+  {
+    id: 1,
+    nombre: PROVEEDOR.nombre,
+    giro: PROVEEDOR.giro,
+    municipio: "Puebla",
+    estado: "Puebla",
+    calificacion: PROVEEDOR.calificacion,
+    verificado: PROVEEDOR.verificado,
+    catalogoDisponible: true,
+  },
+  {
+    id: 2,
+    nombre: "Papelería Ejemplo",
+    giro: "Papelería",
+    municipio: "Tlaxcala",
+    estado: "Tlaxcala",
+    calificacion: 4.6,
+    verificado: true,
+    catalogoDisponible: false,
+  },
+  {
+    id: 3,
+    nombre: "Materiales Ejemplo",
+    giro: "Materiales de construcción",
+    municipio: "San Andrés Cholula",
+    estado: "Puebla",
+    calificacion: 4.9,
+    verificado: true,
+    catalogoDisponible: false,
+  },
+];
 
 export const PRODUCTOS = [
   {

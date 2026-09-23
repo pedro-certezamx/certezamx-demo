@@ -5,7 +5,7 @@ import { ORDEN, PROVEEDOR } from "../../lib/demoData";
 
 export default function ProveedorDashboard() {
   return (
-    <DemoLayout esProveedor titulo="Panel de Florería Puebla">
+    <DemoLayout esProveedor titulo={`Panel de ${PROVEEDOR.nombre}`}>
       <div
         className="rounded-xl p-4 mb-4 text-white"
         style={{ backgroundColor: "#1A3A5C" }}
