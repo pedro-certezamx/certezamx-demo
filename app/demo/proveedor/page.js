@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import DemoLayout from "../../components/DemoLayout";
+import NotificacionSimulada from "../../components/NotificacionSimulada";
 import { ORDEN, PROVEEDOR } from "../../lib/demoData";
 import { obtenerCarrito, resumenProductos } from "../../lib/carrito";
 
@@ -10,6 +11,13 @@ function formatearPrecio(valor) {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+}
+
+// Mismo cuerpo que enviarPushNuevaOrdenProveedor() en la app real.
+function cuerpoPushNuevaOrden(carrito) {
+  const productosTexto =
+    (carrito.productos ?? []).map((p) => `${p.nombre} x${p.cantidad}`).join(", ") || "Sin detalle";
+  return `Nueva orden ${ORDEN.folio} de ${ORDEN.cliente.nombre}. Productos: ${productosTexto}. Total declarado: $${Number(carrito.valorTotal).toLocaleString("es-MX")} MXN. Recuerda la importancia de recabar la evidencia para tus clientes.`;
 }
 
 export default function ProveedorDashboard() {
@@ -21,6 +29,8 @@ export default function ProveedorDashboard() {
 
   return (
     <DemoLayout esProveedor titulo={`Panel de ${PROVEEDOR.nombre}`}>
+      {carrito && <NotificacionSimulada titulo="Nueva orden" cuerpo={cuerpoPushNuevaOrden(carrito)} />}
+
       <div
         className="rounded-xl p-4 mb-4 text-white"
         style={{ backgroundColor: "#1A3A5C" }}
