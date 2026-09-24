@@ -140,6 +140,17 @@ export default function DemoHome() {
             ))}
           </div>
         )}
+
+        <div className="mt-8 rounded-lg border border-gray-200 bg-white p-4 text-center">
+          <p className="text-sm text-gray-500">¿Tienes un negocio?</p>
+          <Link
+            href="/demo/proveedor/registro"
+            className="mt-1 inline-block text-sm font-medium underline"
+            style={{ color: "#1A3A5C" }}
+          >
+            Solicitud de alta de proveedor →
+          </Link>
+        </div>
       </main>
 
       <footer className="py-3 text-center" style={{ backgroundColor: "#1A3A5C" }}>
