@@ -1,8 +1,9 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import DemoLayout from "../../../components/DemoLayout";
 import { PRODUCTOS } from "../../../lib/demoData";
+import { guardarCatalogoPublicado, obtenerCatalogoPublicado } from "../../../lib/catalogoPublicado";
 
 function formatearPrecio(valor) {
   const numero = Number(valor);
@@ -13,6 +14,32 @@ function formatearPrecio(valor) {
 
 function itemVacio() {
   return { nombre: "", precio: "", unidad_medida: "", disponible: true, foto: null };
+}
+
+function redimensionarImagen(archivo, maxLado = 600, calidad = 0.8) {
+  return new Promise((resolve, reject) => {
+    const img = new window.Image();
+    const url = URL.createObjectURL(archivo);
+    img.onload = () => {
+      let { width, height } = img;
+      if (width >= height && width > maxLado) {
+        height = Math.round((height * maxLado) / width);
+        width = maxLado;
+      } else if (height > width && height > maxLado) {
+        width = Math.round((width * maxLado) / height);
+        height = maxLado;
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL("image/jpeg", calidad));
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
 }
 
 function ToggleDisponible({ valor, onCambiar }) {
@@ -45,9 +72,10 @@ function FormularioProducto({ inicial, onGuardar, onCancelar }) {
   const [campos, setCampos] = useState(inicial);
   const [errores, setErrores] = useState({});
 
-  function elegirFoto(archivo) {
+  async function elegirFoto(archivo) {
     if (!archivo) return;
-    setCampos((c) => ({ ...c, foto: URL.createObjectURL(archivo) }));
+    const dataUrl = await redimensionarImagen(archivo);
+    setCampos((c) => ({ ...c, foto: dataUrl }));
   }
 
   function quitarFoto() {
@@ -80,8 +108,8 @@ function FormularioProducto({ inicial, onGuardar, onCancelar }) {
         type="file"
         accept="image/*"
         className="hidden"
-        onChange={(e) => {
-          elegirFoto(e.target.files?.[0]);
+        onChange={async (e) => {
+          await elegirFoto(e.target.files?.[0]);
           e.target.value = "";
         }}
       />
@@ -182,20 +210,30 @@ function FormularioProducto({ inicial, onGuardar, onCancelar }) {
 }
 
 export default function MiCatalogo() {
-  const [draft, setDraft] = useState(() =>
-    PRODUCTOS.map((p) => ({
-      localId: `preload-${p.id}`,
-      nombre: p.nombre,
-      precio: p.precio,
-      unidad_medida: p.unidad_medida,
-      disponible: true,
-      foto: p.foto,
-    }))
-  );
+  const [draft, setDraft] = useState(null);
   const [vista, setVista] = useState("lista");
   const [editandoId, setEditandoId] = useState(null);
   const [modalAbierto, setModalAbierto] = useState(false);
+  const [errorPublicar, setErrorPublicar] = useState(null);
   const [publicado, setPublicado] = useState(false);
+
+  useEffect(() => {
+    const catalogoGuardado = obtenerCatalogoPublicado();
+    if (catalogoGuardado) {
+      setDraft(catalogoGuardado);
+    } else {
+      setDraft(
+        PRODUCTOS.map((p) => ({
+          localId: `preload-${p.id}`,
+          nombre: p.nombre,
+          precio: p.precio,
+          unidad_medida: p.unidad_medida,
+          disponible: true,
+          foto: p.foto,
+        }))
+      );
+    }
+  }, []);
 
   function abrirNuevo() {
     setEditandoId(null);
@@ -220,14 +258,33 @@ export default function MiCatalogo() {
     setVista("lista");
   }
 
+  function confirmarPublicar() {
+    const resultado = guardarCatalogoPublicado(draft);
+    if (!resultado.ok) {
+      setErrorPublicar(
+        "No se pudo publicar el catálogo: no hay espacio suficiente en este navegador. Intenta quitar alguna foto o usar menos productos."
+      );
+      return;
+    }
+    setErrorPublicar(null);
+    setModalAbierto(false);
+    setPublicado(true);
+  }
+
   if (publicado) {
+    const disponibles = draft.filter((item) => item.disponible).length;
+    const mensajeExito =
+      disponibles === 0
+        ? 'Publicaste tu catálogo, pero como todos los productos están marcados "No disponible", los compradores no verán ninguno todavía.'
+        : disponibles === 1
+        ? "Tu producto ya está visible para los compradores."
+        : `Tus ${disponibles} productos ya están visibles para los compradores.`;
+
     return (
       <DemoLayout esProveedor titulo="Mi Catálogo">
         <div className="rounded-lg border border-green-200 bg-green-50 p-6 text-center">
           <p className="text-lg font-semibold text-green-800">✅ Catálogo publicado</p>
-          <p className="mt-2 text-sm text-green-700">
-            Tus {draft.length} productos ya están visibles para los compradores.
-          </p>
+          <p className="mt-2 text-sm text-green-700">{mensajeExito}</p>
         </div>
         <Link href="/demo/proveedor">
           <button
@@ -237,6 +294,18 @@ export default function MiCatalogo() {
             ← Panel principal
           </button>
         </Link>
+      </DemoLayout>
+    );
+  }
+
+  if (!draft) {
+    return (
+      <DemoLayout esProveedor titulo="Mi Catálogo">
+        <div className="space-y-3 animate-pulse">
+          <div className="h-16 bg-gray-100 rounded-lg" />
+          <div className="h-16 bg-gray-100 rounded-lg" />
+          <div className="h-16 bg-gray-100 rounded-lg" />
+        </div>
       </DemoLayout>
     );
   }
@@ -337,6 +406,11 @@ export default function MiCatalogo() {
             <p className="mt-3 text-sm text-gray-600">
               Vas a publicar <strong>{draft.length} productos</strong>. Esto reemplaza por completo el catálogo que tus compradores ven ahora mismo y no se puede deshacer.
             </p>
+
+            {errorPublicar && (
+              <p className="mt-3 rounded-md bg-red-50 px-4 py-3 text-sm text-red-600">{errorPublicar}</p>
+            )}
+
             <div className="mt-6 flex justify-end gap-3">
               <button
                 type="button"
@@ -347,10 +421,7 @@ export default function MiCatalogo() {
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setModalAbierto(false);
-                  setPublicado(true);
-                }}
+                onClick={confirmarPublicar}
                 className="rounded-md px-4 py-2 text-sm font-medium text-white"
                 style={{ backgroundColor: "#C8890A" }}
               >
