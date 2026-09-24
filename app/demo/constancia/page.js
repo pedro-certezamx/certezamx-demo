@@ -12,6 +12,63 @@ function formatearPrecio(valor) {
   });
 }
 
+function BloqueCalificacion({ nombreProveedor }) {
+  const [estrellas, setEstrellas] = useState(0);
+  const [comentario, setComentario] = useState("");
+  const [enviado, setEnviado] = useState(false);
+
+  if (enviado) {
+    return (
+      <p className="text-sm font-medium text-green-700 text-center">
+        ✓ ¡Gracias por tu calificación!
+      </p>
+    );
+  }
+
+  return (
+    <div>
+      <h2 className="text-base font-semibold" style={{ color: "#1A3A5C" }}>
+        ¿Cómo fue tu experiencia con {nombreProveedor}?
+      </h2>
+
+      <div className="mt-3 flex gap-1 text-3xl">
+        {[1, 2, 3, 4, 5].map((numero) => (
+          <button
+            key={numero}
+            type="button"
+            onClick={() => setEstrellas(numero)}
+            aria-label={`${numero} estrella${numero > 1 ? "s" : ""}`}
+            style={{ color: numero <= estrellas ? "#C8890A" : "#D1D5DB" }}
+          >
+            ★
+          </button>
+        ))}
+      </div>
+
+      {estrellas > 0 && (
+        <div className="mt-4">
+          <textarea
+            value={comentario}
+            onChange={(e) => setComentario(e.target.value)}
+            maxLength={500}
+            placeholder="Comentario (opcional)"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400"
+            rows={3}
+          />
+          <button
+            type="button"
+            onClick={() => setEnviado(true)}
+            className="mt-3 w-full rounded-md px-4 py-2 text-sm font-medium text-white"
+            style={{ backgroundColor: "#1A3A5C" }}
+          >
+            Enviar calificación
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Constancia() {
   const [carrito, setCarrito] = useState(null);
 
@@ -186,6 +243,11 @@ export default function Constancia() {
               <p className="text-white text-xs mt-1 opacity-70" style={{ fontSize: "8px" }}>QR Verif.</p>
             </div>
           </div>
+        </div>
+
+        <hr className="mb-4 border-gray-200" />
+        <div className="mb-4">
+          <BloqueCalificacion nombreProveedor={PROVEEDOR.nombre} />
         </div>
 
         <p className="text-xs text-gray-400 text-center mb-4">
