@@ -5,6 +5,7 @@ import DemoLayout from "../../components/DemoLayout";
 import NotificacionSimulada from "../../components/NotificacionSimulada";
 import { ORDEN, PROVEEDOR } from "../../lib/demoData";
 import { obtenerCarrito, resumenProductos } from "../../lib/carrito";
+import { useRecorrido } from "../../lib/recorridos";
 
 function formatearPrecio(valor) {
   return Number(valor).toLocaleString("es-MX", {
@@ -22,6 +23,7 @@ function cuerpoPushNuevaOrden(carrito) {
 
 export default function ProveedorDashboard() {
   const [carrito, setCarrito] = useState(null);
+  const recorrido = useRecorrido();
 
   useEffect(() => {
     setCarrito(obtenerCarrito());
@@ -79,7 +81,7 @@ export default function ProveedorDashboard() {
               </p>
             </div>
 
-            <Link href="/demo/proveedor/declarar">
+            <Link href={recorrido?.siguiente ?? "/demo/proveedor/declarar"}>
               <button
                 className="w-full py-2.5 rounded-lg font-bold text-white"
                 style={{ backgroundColor: "#C8890A" }}

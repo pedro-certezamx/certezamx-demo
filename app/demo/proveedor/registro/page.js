@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import DemoLayout from "../../../components/DemoLayout";
 import { PROVEEDOR } from "../../../lib/demoData";
+import { useRecorrido } from "../../../lib/recorridos";
 
 function Campo({ label, valor, ayuda, requerido }) {
   return (
@@ -51,10 +52,11 @@ function Checkbox({ children, requerido }) {
 export default function RegistroProveedor() {
   const [enviado, setEnviado] = useState(false);
   const router = useRouter();
+  const recorrido = useRecorrido();
 
   const handleEnviar = () => {
     setEnviado(true);
-    setTimeout(() => router.push("/demo/proveedor/catalogo"), 3000);
+    setTimeout(() => router.push(recorrido?.siguiente ?? "/demo/proveedor/catalogo"), 3000);
   };
 
   return (

@@ -4,6 +4,7 @@ import Link from "next/link";
 import DemoLayout from "../../../components/DemoLayout";
 import { PRODUCTOS } from "../../../lib/demoData";
 import { guardarCatalogoPublicado, obtenerCatalogoPublicado } from "../../../lib/catalogoPublicado";
+import { useRecorrido } from "../../../lib/recorridos";
 
 function formatearPrecio(valor) {
   const numero = Number(valor);
@@ -216,6 +217,7 @@ export default function MiCatalogo() {
   const [modalAbierto, setModalAbierto] = useState(false);
   const [errorPublicar, setErrorPublicar] = useState(null);
   const [publicado, setPublicado] = useState(false);
+  const recorrido = useRecorrido();
 
   useEffect(() => {
     const catalogoGuardado = obtenerCatalogoPublicado();
@@ -286,7 +288,7 @@ export default function MiCatalogo() {
           <p className="text-lg font-semibold text-green-800">✅ Catálogo publicado</p>
           <p className="mt-2 text-sm text-green-700">{mensajeExito}</p>
         </div>
-        <Link href="/demo/proveedor">
+        <Link href={recorrido?.siguiente ?? "/demo/proveedor"}>
           <button
             className="mt-6 w-full py-3 rounded-lg font-bold text-white"
             style={{ backgroundColor: "#1A3A5C" }}
@@ -397,6 +399,18 @@ export default function MiCatalogo() {
             Publicar catálogo ({draft.length} productos)
           </button>
         </>
+      )}
+
+      {recorrido?.siguiente && (
+        <Link href={recorrido.siguiente}>
+          <button
+            type="button"
+            className="mt-3 w-full rounded-lg border px-4 py-3 text-sm font-semibold"
+            style={{ borderColor: "#1A3A5C", color: "#1A3A5C" }}
+          >
+            Siguiente paso →
+          </button>
+        </Link>
       )}
 
       {modalAbierto && (

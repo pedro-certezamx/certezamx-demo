@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import DemoLayout from "../../../components/DemoLayout";
 import { ORDEN, PROVEEDOR } from "../../../lib/demoData";
 import { obtenerCarrito, resumenProductos } from "../../../lib/carrito";
+import { useRecorrido } from "../../../lib/recorridos";
 
 function formatearPrecio(valor) {
   return Number(valor).toLocaleString("es-MX", {
@@ -16,6 +17,7 @@ export default function Declarar() {
   const [carrito, setCarrito] = useState(null);
   const [declarado, setDeclarado] = useState(false);
   const router = useRouter();
+  const recorrido = useRecorrido();
 
   useEffect(() => {
     setCarrito(obtenerCarrito());
@@ -23,7 +25,7 @@ export default function Declarar() {
 
   const handleDeclarar = () => {
     setDeclarado(true);
-    setTimeout(() => router.push("/demo/proveedor/evidencia"), 3000);
+    setTimeout(() => router.push(recorrido?.siguiente ?? "/demo/proveedor/evidencia"), 3000);
   };
 
   return (

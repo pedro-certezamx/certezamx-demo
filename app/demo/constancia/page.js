@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ORDEN, PROVEEDOR } from "../../lib/demoData";
 import { obtenerCarrito } from "../../lib/carrito";
+import { BarraDePasos } from "../../components/DemoLayout";
+import { RECORRIDOS, rutaDelPaso, useRecorrido } from "../../lib/recorridos";
 
 function formatearPrecio(valor) {
   return Number(valor).toLocaleString("es-MX", {
@@ -71,6 +73,8 @@ function BloqueCalificacion({ nombreProveedor }) {
 
 export default function Constancia() {
   const [carrito, setCarrito] = useState(null);
+  const recorrido = useRecorrido();
+  const esRecorridoProveedor = recorrido?.recorrido === "proveedor";
 
   useEffect(() => {
     setCarrito(obtenerCarrito());
@@ -79,9 +83,21 @@ export default function Constancia() {
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: "#F8F9FA" }}>
       {/* Header */}
-      <header style={{ backgroundColor: "#1A3A5C" }} className="px-4 py-5">
+      <header
+        style={{ backgroundColor: "#1A3A5C" }}
+        className={esRecorridoProveedor ? "px-4 py-5 flex items-center justify-between" : "px-4 py-5"}
+      >
         <Image src="/Asset_3.png" alt="CertezaMX" width={175} height={52} className="object-contain" />
+        {esRecorridoProveedor && (
+          <span className="text-xs text-white opacity-70 bg-white bg-opacity-10 px-2 py-1 rounded">
+            Vista Proveedor
+          </span>
+        )}
       </header>
+
+      {recorrido && (
+        <BarraDePasos pasos={recorrido.pasos.map((p) => p.etiqueta)} actual={recorrido.numero} />
+      )}
 
       <main className="flex-1 px-4 py-6 max-w-lg mx-auto w-full">
         {/* Documento constancia */}
@@ -245,10 +261,15 @@ export default function Constancia() {
           </div>
         </div>
 
-        <hr className="mb-4 border-gray-200" />
-        <div className="mb-4">
-          <BloqueCalificacion nombreProveedor={PROVEEDOR.nombre} />
-        </div>
+        {/* La calificación es de quien compra; en el recorrido del proveedor no aplica. */}
+        {!esRecorridoProveedor && (
+          <>
+            <hr className="mb-4 border-gray-200" />
+            <div className="mb-4">
+              <BloqueCalificacion nombreProveedor={PROVEEDOR.nombre} />
+            </div>
+          </>
+        )}
 
         <p className="text-xs text-gray-400 text-center mb-4">
           💡 En la app real, guarda esta pantalla como captura de pantalla desde tu celular.
@@ -262,6 +283,18 @@ export default function Constancia() {
             ← Volver al inicio del demo
           </button>
         </Link>
+
+        {/* Solo aparece cuando el recorrido del comprador exista en RECORRIDOS. */}
+        {esRecorridoProveedor && RECORRIDOS.comprador && (
+          <Link href={rutaDelPaso("comprador", RECORRIDOS.comprador[0].paso)}>
+            <button
+              className="w-full py-3 rounded-lg font-bold border mb-3"
+              style={{ borderColor: "#1A3A5C", color: "#1A3A5C" }}
+            >
+              Ver el recorrido del comprador →
+            </button>
+          </Link>
+        )}
       </main>
 
       <footer className="py-3 text-center" style={{ backgroundColor: "#1A3A5C" }}>
