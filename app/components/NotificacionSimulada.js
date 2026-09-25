@@ -4,9 +4,13 @@ import Image from "next/image";
 
 // Imita el push que el service worker de la app real muestra con
 // showNotification(). Solo es visual: no usa la API Notification ni
-// pide permisos al navegador. Va dentro de la página, arriba del panel,
-// ocupando su propio espacio para no tapar nada.
-export default function NotificacionSimulada({ titulo, cuerpo }) {
+// pide permisos al navegador. Va dentro de la página, ocupando su propio
+// espacio para no tapar nada.
+export default function NotificacionSimulada({
+  titulo,
+  cuerpo,
+  etiqueta = "Notificación simulada · así te llega cada nueva orden",
+}) {
   const [montada, setMontada] = useState(true);
   const [visible, setVisible] = useState(false);
 
@@ -34,7 +38,7 @@ export default function NotificacionSimulada({ titulo, cuerpo }) {
         className="text-center text-xs font-semibold mb-1.5 px-2 py-1 rounded-full mx-auto w-fit"
         style={{ backgroundColor: "#FEF3C7", color: "#92400E" }}
       >
-        Notificación simulada · así te llega cada nueva orden
+        {etiqueta}
       </p>
       <div
         role="status"

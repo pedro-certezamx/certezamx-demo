@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
 import DemoLayout from "../../components/DemoLayout";
+import NotificacionSimulada from "../../components/NotificacionSimulada";
 import { ORDEN } from "../../lib/demoData";
+import { useRecorrido } from "../../lib/recorridos";
 
 const TIMELINE = [
   { texto: "Orden creada", completado: true, timestamp: "28 jun 2026 · 10:42 a.m." },
@@ -12,6 +14,8 @@ const TIMELINE = [
 ];
 
 export default function Estado() {
+  const recorrido = useRecorrido();
+
   return (
     <DemoLayout paso={5} titulo={`Orden ${ORDEN.folio}`}>
       <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100 mb-4">
@@ -71,19 +75,38 @@ export default function Estado() {
         </div>
       </div>
 
-      <div className="p-3 rounded-lg bg-blue-50 border border-blue-100">
-        <p className="text-xs text-blue-700">
-          💡 <strong>¿Eres el proveedor?</strong> Mira cómo se ve tu panel de gestión:
-        </p>
-        <Link href="/demo/proveedor">
-          <button
-            className="mt-2 w-full py-2 rounded-lg text-sm font-semibold text-white"
-            style={{ backgroundColor: "#1A3A5C" }}
-          >
-            Ver panel del proveedor →
-          </button>
-        </Link>
-      </div>
+      {recorrido?.siguiente ? (
+        // En el recorrido del comprador: aviso de la Constancia con el texto real del push.
+        <>
+          <NotificacionSimulada
+            etiqueta="Notificación simulada · así te avisamos cuando tu Constancia está lista"
+            titulo="Tu constancia está lista"
+            cuerpo={`Tu Constancia de Evidencia Documental de la orden ${ORDEN.folio} ya está lista.`}
+          />
+          <Link href={recorrido.siguiente}>
+            <button
+              className="w-full py-3 rounded-lg font-bold text-white"
+              style={{ backgroundColor: "#16a34a" }}
+            >
+              Ver mi Constancia ›
+            </button>
+          </Link>
+        </>
+      ) : (
+        <div className="p-3 rounded-lg bg-blue-50 border border-blue-100">
+          <p className="text-xs text-blue-700">
+            💡 <strong>¿Eres el proveedor?</strong> Mira cómo se ve tu panel de gestión:
+          </p>
+          <Link href="/demo/proveedor">
+            <button
+              className="mt-2 w-full py-2 rounded-lg text-sm font-semibold text-white"
+              style={{ backgroundColor: "#1A3A5C" }}
+            >
+              Ver panel del proveedor →
+            </button>
+          </Link>
+        </div>
+      )}
     </DemoLayout>
   );
 }

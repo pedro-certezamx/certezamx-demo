@@ -12,6 +12,15 @@ export const RECORRIDOS = {
     { paso: "evidencia", etiqueta: "Evidencia" },
     { paso: "constancia", etiqueta: "Constancia" },
   ],
+  comprador: [
+    { paso: "explorar" }, // portada: sin etiqueta, queda fuera de la barra
+    { paso: "catalogo", etiqueta: "Catálogo" },
+    { paso: "orden", etiqueta: "Orden" },
+    { paso: "pagar", etiqueta: "Pagar" },
+    { paso: "comprobante", etiqueta: "Comprobante" },
+    { paso: "seguimiento", etiqueta: "Seguimiento" },
+    { paso: "constancia", etiqueta: "Constancia" },
+  ],
 };
 
 export function rutaDelPaso(recorrido, paso) {
@@ -36,11 +45,13 @@ export function useRecorrido() {
   const pasos = RECORRIDOS[contexto.recorrido];
   const indice = pasos.findIndex((p) => p.paso === contexto.paso);
   const siguiente = pasos[indice + 1];
+  // Los pasos sin etiqueta (la portada) no aparecen en la barra.
+  const pasosEnBarra = pasos.filter((p) => p.etiqueta);
 
   return {
     ...contexto,
-    pasos,
-    numero: indice + 1,
+    pasos: pasosEnBarra,
+    numero: pasosEnBarra.findIndex((p) => p.paso === contexto.paso) + 1,
     siguiente: siguiente ? rutaDelPaso(contexto.recorrido, siguiente.paso) : null,
   };
 }

@@ -2,14 +2,16 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import DemoLayout from "../../components/DemoLayout";
+import { useRecorrido } from "../../lib/recorridos";
 
 export default function Comprobante() {
   const [enviado, setEnviado] = useState(false);
   const router = useRouter();
+  const recorrido = useRecorrido();
 
   const handleEnviar = () => {
     setEnviado(true);
-    setTimeout(() => router.push("/demo/estado"), 3000);
+    setTimeout(() => router.push(recorrido?.siguiente ?? "/demo/estado"), 3000);
   };
 
   return (

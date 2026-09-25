@@ -6,6 +6,7 @@ import DemoLayout from "../../components/DemoLayout";
 import { PRODUCTOS, PROVEEDOR } from "../../lib/demoData";
 import { guardarCarrito } from "../../lib/carrito";
 import { obtenerCatalogoPublicado } from "../../lib/catalogoPublicado";
+import { RECORRIDOS, rutaDelPaso, useRecorrido } from "../../lib/recorridos";
 
 function formatearPrecio(valor) {
   return Number(valor).toLocaleString("es-MX", {
@@ -88,6 +89,11 @@ export default function Catalogo() {
   const router = useRouter();
   const [cantidades, setCantidades] = useState({});
   const [productos, setProductos] = useState(null);
+  const recorrido = useRecorrido();
+  // Dentro de un recorrido, "Regresar al inicio" vuelve a su portada.
+  const hrefInicio = recorrido
+    ? rutaDelPaso(recorrido.recorrido, RECORRIDOS[recorrido.recorrido][0].paso)
+    : "/demo";
 
   useEffect(() => {
     const publicado = obtenerCatalogoPublicado();
@@ -118,7 +124,7 @@ export default function Catalogo() {
       }));
 
     guardarCarrito({ productos: productosEnCarrito, valorTotal, totalArticulos });
-    router.push("/demo/orden");
+    router.push(recorrido?.siguiente ?? "/demo/orden");
   };
 
   return (
@@ -139,7 +145,7 @@ export default function Catalogo() {
         <div className="text-center text-gray-600 py-12">
           <p className="text-sm">Este proveedor no tiene productos disponibles en este momento.</p>
           <Link
-            href="/demo"
+            href={hrefInicio}
             className="mt-2 inline-block text-sm font-medium underline"
             style={{ color: "#1A3A5C" }}
           >

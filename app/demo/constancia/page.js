@@ -7,6 +7,13 @@ import { obtenerCarrito } from "../../lib/carrito";
 import { BarraDePasos } from "../../components/DemoLayout";
 import { RECORRIDOS, rutaDelPaso, useRecorrido } from "../../lib/recorridos";
 
+// Al final de cada recorrido, enlace al recorrido del otro lado.
+const OTRO_RECORRIDO = { proveedor: "comprador", comprador: "proveedor" };
+const TEXTO_OTRO_RECORRIDO = {
+  comprador: "Ver el recorrido del comprador →",
+  proveedor: "Ver el recorrido del proveedor →",
+};
+
 function formatearPrecio(valor) {
   return Number(valor).toLocaleString("es-MX", {
     minimumFractionDigits: 2,
@@ -75,6 +82,7 @@ export default function Constancia() {
   const [carrito, setCarrito] = useState(null);
   const recorrido = useRecorrido();
   const esRecorridoProveedor = recorrido?.recorrido === "proveedor";
+  const otroRecorrido = OTRO_RECORRIDO[recorrido?.recorrido];
 
   useEffect(() => {
     setCarrito(obtenerCarrito());
@@ -284,14 +292,13 @@ export default function Constancia() {
           </button>
         </Link>
 
-        {/* Solo aparece cuando el recorrido del comprador exista en RECORRIDOS. */}
-        {esRecorridoProveedor && RECORRIDOS.comprador && (
-          <Link href={rutaDelPaso("comprador", RECORRIDOS.comprador[0].paso)}>
+        {otroRecorrido && RECORRIDOS[otroRecorrido] && (
+          <Link href={rutaDelPaso(otroRecorrido, RECORRIDOS[otroRecorrido][0].paso)}>
             <button
               className="w-full py-3 rounded-lg font-bold border mb-3"
               style={{ borderColor: "#1A3A5C", color: "#1A3A5C" }}
             >
-              Ver el recorrido del comprador →
+              {TEXTO_OTRO_RECORRIDO[otroRecorrido]}
             </button>
           </Link>
         )}

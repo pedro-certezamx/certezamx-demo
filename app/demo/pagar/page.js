@@ -4,6 +4,7 @@ import Link from "next/link";
 import DemoLayout from "../../components/DemoLayout";
 import { PROVEEDOR, ORDEN } from "../../lib/demoData";
 import { obtenerCarrito } from "../../lib/carrito";
+import { useRecorrido } from "../../lib/recorridos";
 
 function formatearPrecio(valor) {
   return Number(valor).toLocaleString("es-MX", {
@@ -14,6 +15,7 @@ function formatearPrecio(valor) {
 
 export default function Pagar() {
   const [carrito, setCarrito] = useState(null);
+  const recorrido = useRecorrido();
 
   useEffect(() => {
     setCarrito(obtenerCarrito());
@@ -62,7 +64,7 @@ export default function Pagar() {
       </p>
 
       {carrito && (
-        <Link href="/demo/comprobante">
+        <Link href={recorrido?.siguiente ?? "/demo/comprobante"}>
           <button
             className="w-full py-3 rounded-lg font-bold text-white"
             style={{ backgroundColor: "#C8890A" }}

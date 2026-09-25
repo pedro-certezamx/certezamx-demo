@@ -4,10 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { PROVEEDORES } from "../lib/demoData";
 import { limpiarCarrito } from "../lib/carrito";
+import { RECORRIDOS, rutaDelPaso, useRecorrido } from "../lib/recorridos";
 
 const ESTADOS_PILOTO = ["Puebla", "Tlaxcala"];
 
-function TarjetaProveedor({ proveedor }) {
+function TarjetaProveedor({ proveedor, hrefCatalogo }) {
   const { nombre, giro, municipio, estado, calificacion, verificado, catalogoDisponible } = proveedor;
 
   const contenido = (
@@ -52,13 +53,20 @@ function TarjetaProveedor({ proveedor }) {
     </div>
   );
 
-  return catalogoDisponible ? <Link href="/demo/catalogo">{contenido}</Link> : contenido;
+  return catalogoDisponible ? <Link href={hrefCatalogo}>{contenido}</Link> : contenido;
 }
 
 export default function DemoHome() {
   const [filtroGiro, setFiltroGiro] = useState("");
   const [filtroMunicipio, setFiltroMunicipio] = useState("");
   const [filtroEstado, setFiltroEstado] = useState("");
+  const recorrido = useRecorrido();
+  const hrefCatalogo = recorrido?.siguiente ?? "/demo/catalogo";
+  // Dentro del recorrido del comprador, el registro lleva a la entrada del recorrido del proveedor.
+  const hrefRegistro =
+    recorrido?.recorrido === "comprador"
+      ? rutaDelPaso("proveedor", RECORRIDOS.proveedor[0].paso)
+      : "/demo/proveedor/registro";
 
   useEffect(() => {
     limpiarCarrito();
@@ -136,7 +144,7 @@ export default function DemoHome() {
         ) : (
           <div className="flex flex-col gap-4">
             {proveedoresFiltrados.map((proveedor) => (
-              <TarjetaProveedor key={proveedor.id} proveedor={proveedor} />
+              <TarjetaProveedor key={proveedor.id} proveedor={proveedor} hrefCatalogo={hrefCatalogo} />
             ))}
           </div>
         )}
@@ -144,7 +152,7 @@ export default function DemoHome() {
         <div className="mt-8 rounded-lg border border-gray-200 bg-white p-4 text-center">
           <p className="text-sm text-gray-500">¿Tienes un negocio?</p>
           <Link
-            href="/demo/proveedor/registro"
+            href={hrefRegistro}
             className="mt-1 inline-block text-sm font-medium underline"
             style={{ color: "#1A3A5C" }}
           >
