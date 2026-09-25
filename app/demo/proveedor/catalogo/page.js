@@ -288,12 +288,13 @@ export default function MiCatalogo() {
           <p className="text-lg font-semibold text-green-800">✅ Catálogo publicado</p>
           <p className="mt-2 text-sm text-green-700">{mensajeExito}</p>
         </div>
+        {/* En el recorrido este botón avanza al siguiente paso; en /demo regresa al panel. */}
         <Link href={recorrido?.siguiente ?? "/demo/proveedor"}>
           <button
             className="mt-6 w-full py-3 rounded-lg font-bold text-white"
             style={{ backgroundColor: "#1A3A5C" }}
           >
-            ← Panel principal
+            {recorrido ? "Siguiente paso →" : "← Panel principal"}
           </button>
         </Link>
       </DemoLayout>

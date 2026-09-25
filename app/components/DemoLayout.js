@@ -51,6 +51,22 @@ export function BarraDePasos({ pasos, actual }) {
   );
 }
 
+const TEXTO_FRANJA = {
+  comprador: "Ejemplo para quien compra · datos ficticios",
+  proveedor: "Ejemplo para proveedores · datos ficticios",
+};
+
+// Franja en la primera pantalla de cada recorrido; también la usa la portada del comprador.
+export function FranjaEjemplo({ recorrido }) {
+  return (
+    <div className="px-4 py-2 text-center" style={{ backgroundColor: "#FEF3C7" }}>
+      <p className="text-xs font-semibold" style={{ color: "#92400E" }}>
+        {TEXTO_FRANJA[recorrido]}
+      </p>
+    </div>
+  );
+}
+
 export default function DemoLayout({ children, paso, totalPasos, titulo, esProveedor = false }) {
   const pasosComprador = [
     "Catálogo",
@@ -68,6 +84,13 @@ export default function DemoLayout({ children, paso, totalPasos, titulo, esProve
     ? { pasos: pasosComprador, actual: paso }
     : null;
 
+  // Botón inferior: en /demo vuelve al inicio; en un recorrido lo reinicia, salvo en su primer paso.
+  const botonInferior = !recorrido
+    ? { href: "/demo", texto: "← Volver al inicio del demo" }
+    : recorrido.esPrimerPaso
+    ? null
+    : { href: recorrido.inicio, texto: "↺ Reiniciar el ejemplo" };
+
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: "#F8F9FA" }}>
       {/* Header */}
@@ -83,6 +106,9 @@ export default function DemoLayout({ children, paso, totalPasos, titulo, esProve
       {/* Barra de progreso */}
       {barra && <BarraDePasos pasos={barra.pasos} actual={barra.actual} />}
 
+      {/* Franja del ejemplo, solo en la primera pantalla del recorrido */}
+      {recorrido?.esPrimerPaso && <FranjaEjemplo recorrido={recorrido.recorrido} />}
+
       {/* Contenido */}
       <main className="flex-1 px-4 py-6 max-w-lg mx-auto w-full">
         {titulo && (
@@ -93,14 +119,15 @@ export default function DemoLayout({ children, paso, totalPasos, titulo, esProve
         {children}
       </main>
 
-      {/* Botón volver al inicio */}
-      <div className="px-4 pb-4 max-w-lg mx-auto w-full">
-        <Link href="/demo">
-          <button className="w-full py-2 text-sm rounded-lg border" style={{ borderColor: "#1A3A5C", color: "#1A3A5C" }}>
-            ← Volver al inicio del demo
-          </button>
-        </Link>
-      </div>
+      {botonInferior && (
+        <div className="px-4 pb-4 max-w-lg mx-auto w-full">
+          <Link href={botonInferior.href}>
+            <button className="w-full py-2 text-sm rounded-lg border" style={{ borderColor: "#1A3A5C", color: "#1A3A5C" }}>
+              {botonInferior.texto}
+            </button>
+          </Link>
+        </div>
+      )}
 
       {/* Footer MODO DEMO */}
       <footer className="py-3 text-center" style={{ backgroundColor: "#1A3A5C" }}>

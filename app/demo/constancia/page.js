@@ -5,14 +5,7 @@ import Link from "next/link";
 import { ORDEN, PROVEEDOR } from "../../lib/demoData";
 import { obtenerCarrito } from "../../lib/carrito";
 import { BarraDePasos } from "../../components/DemoLayout";
-import { RECORRIDOS, rutaDelPaso, useRecorrido } from "../../lib/recorridos";
-
-// Al final de cada recorrido, enlace al recorrido del otro lado.
-const OTRO_RECORRIDO = { proveedor: "comprador", comprador: "proveedor" };
-const TEXTO_OTRO_RECORRIDO = {
-  comprador: "Ver el recorrido del comprador →",
-  proveedor: "Ver el recorrido del proveedor →",
-};
+import { useRecorrido } from "../../lib/recorridos";
 
 function formatearPrecio(valor) {
   return Number(valor).toLocaleString("es-MX", {
@@ -82,7 +75,6 @@ export default function Constancia() {
   const [carrito, setCarrito] = useState(null);
   const recorrido = useRecorrido();
   const esRecorridoProveedor = recorrido?.recorrido === "proveedor";
-  const otroRecorrido = OTRO_RECORRIDO[recorrido?.recorrido];
 
   useEffect(() => {
     setCarrito(obtenerCarrito());
@@ -283,24 +275,33 @@ export default function Constancia() {
           💡 En la app real, guarda esta pantalla como captura de pantalla desde tu celular.
         </p>
 
-        <Link href="/demo">
+        {/* En un recorrido, vuelve a su primer paso; en /demo, al inicio de la demo. */}
+        <Link href={recorrido?.inicio ?? "/demo"}>
           <button
             className="w-full py-3 rounded-lg font-bold text-white mb-3"
             style={{ backgroundColor: "#C8890A" }}
           >
-            ← Volver al inicio del demo
+            {recorrido ? "← Ver el ejemplo otra vez" : "← Volver al inicio del demo"}
           </button>
         </Link>
 
-        {otroRecorrido && RECORRIDOS[otroRecorrido] && (
-          <Link href={rutaDelPaso(otroRecorrido, RECORRIDOS[otroRecorrido][0].paso)}>
-            <button
-              className="w-full py-3 rounded-lg font-bold border mb-3"
-              style={{ borderColor: "#1A3A5C", color: "#1A3A5C" }}
+        {/* Cierre del recorrido del proveedor: única salida hacia la plataforma real. */}
+        {esRecorridoProveedor && (
+          <div className="pt-5 border-t border-gray-200 text-center">
+            <h2 className="text-base font-bold mb-3" style={{ color: "#1A3A5C" }}>
+              ¿Te interesa para tu negocio?
+            </h2>
+            <a
+              href="https://app.certezamx.com/proveedor/registro"
+              className="block w-full py-3 rounded-lg font-bold text-white"
+              style={{ backgroundColor: "#1A3A5C" }}
             >
-              {TEXTO_OTRO_RECORRIDO[otroRecorrido]}
-            </button>
-          </Link>
+              Solicitar mi alta como proveedor →
+            </a>
+            <p className="text-xs text-gray-400 mt-2 mb-3">
+              Este botón te lleva a la plataforma real de CertezaMX.
+            </p>
+          </div>
         )}
       </main>
 

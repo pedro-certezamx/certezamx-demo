@@ -4,7 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { PROVEEDORES } from "../lib/demoData";
 import { limpiarCarrito } from "../lib/carrito";
-import { RECORRIDOS, rutaDelPaso, useRecorrido } from "../lib/recorridos";
+import { useRecorrido } from "../lib/recorridos";
+import { FranjaEjemplo } from "../components/DemoLayout";
 
 const ESTADOS_PILOTO = ["Puebla", "Tlaxcala"];
 
@@ -62,11 +63,6 @@ export default function DemoHome() {
   const [filtroEstado, setFiltroEstado] = useState("");
   const recorrido = useRecorrido();
   const hrefCatalogo = recorrido?.siguiente ?? "/demo/catalogo";
-  // Dentro del recorrido del comprador, el registro lleva a la entrada del recorrido del proveedor.
-  const hrefRegistro =
-    recorrido?.recorrido === "comprador"
-      ? rutaDelPaso("proveedor", RECORRIDOS.proveedor[0].paso)
-      : "/demo/proveedor/registro";
 
   useEffect(() => {
     limpiarCarrito();
@@ -92,6 +88,8 @@ export default function DemoHome() {
         <h1 className="text-white text-xl font-semibold mt-3">Explorar Proveedores</h1>
         <p className="text-white text-sm mt-1 opacity-80">Encuentra proveedores verificados en México</p>
       </header>
+
+      {recorrido?.esPrimerPaso && <FranjaEjemplo recorrido={recorrido.recorrido} />}
 
       <main className="flex-1 px-4 py-6 max-w-lg mx-auto w-full">
         <div className="mb-6 p-3 rounded-lg bg-blue-50 border border-blue-100">
@@ -149,16 +147,19 @@ export default function DemoHome() {
           </div>
         )}
 
-        <div className="mt-8 rounded-lg border border-gray-200 bg-white p-4 text-center">
-          <p className="text-sm text-gray-500">¿Tienes un negocio?</p>
-          <Link
-            href={hrefRegistro}
-            className="mt-1 inline-block text-sm font-medium underline"
-            style={{ color: "#1A3A5C" }}
-          >
-            Solicitud de alta de proveedor →
-          </Link>
-        </div>
+        {/* Dentro del recorrido del comprador no se enlaza al lado del proveedor. */}
+        {!recorrido && (
+          <div className="mt-8 rounded-lg border border-gray-200 bg-white p-4 text-center">
+            <p className="text-sm text-gray-500">¿Tienes un negocio?</p>
+            <Link
+              href="/demo/proveedor/registro"
+              className="mt-1 inline-block text-sm font-medium underline"
+              style={{ color: "#1A3A5C" }}
+            >
+              Solicitud de alta de proveedor →
+            </Link>
+          </div>
+        )}
       </main>
 
       <footer className="py-3 text-center" style={{ backgroundColor: "#1A3A5C" }}>

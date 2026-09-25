@@ -5,7 +5,6 @@ import { createContext, useContext } from "react";
 // de la demo; aquí se define el orden de sus pasos y las etiquetas de su barra.
 export const RECORRIDOS = {
   proveedor: [
-    { paso: "registro", etiqueta: "Registro" },
     { paso: "catalogo", etiqueta: "Catálogo" },
     { paso: "panel", etiqueta: "Nueva orden" },
     { paso: "declarar", etiqueta: "Declarar" },
@@ -47,11 +46,15 @@ export function useRecorrido() {
   const siguiente = pasos[indice + 1];
   // Los pasos sin etiqueta (la portada) no aparecen en la barra.
   const pasosEnBarra = pasos.filter((p) => p.etiqueta);
+  const primerPaso = pasos[0].paso;
 
   return {
     ...contexto,
     pasos: pasosEnBarra,
     numero: pasosEnBarra.findIndex((p) => p.paso === contexto.paso) + 1,
     siguiente: siguiente ? rutaDelPaso(contexto.recorrido, siguiente.paso) : null,
+    // Primer paso del mismo recorrido: destino de "Reiniciar" y "Ver el ejemplo otra vez".
+    inicio: rutaDelPaso(contexto.recorrido, primerPaso),
+    esPrimerPaso: contexto.paso === primerPaso,
   };
 }

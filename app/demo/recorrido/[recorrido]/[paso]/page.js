@@ -1,7 +1,6 @@
 "use client";
 import { notFound } from "next/navigation";
 import { RecorridoProvider } from "../../../../lib/recorridos";
-import RegistroProveedor from "../../../proveedor/registro/page";
 import MiCatalogo from "../../../proveedor/catalogo/page";
 import ProveedorDashboard from "../../../proveedor/page";
 import Declarar from "../../../proveedor/declarar/page";
@@ -17,7 +16,6 @@ import Estado from "../../../estado/page";
 // Cada paso de cada recorrido reutiliza una pantalla de la demo.
 const PANTALLAS = {
   proveedor: {
-    registro: RegistroProveedor,
     catalogo: MiCatalogo,
     panel: ProveedorDashboard,
     declarar: Declarar,
