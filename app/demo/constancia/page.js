@@ -71,6 +71,76 @@ function BloqueCalificacion({ nombreProveedor }) {
   );
 }
 
+const ETIQUETAS_ESTRELLAS = ["", "Muy mala", "Mala", "Regular", "Buena", "Excelente"];
+
+// Calificación del proveedor a quien le compró; textos de P-6 (CalificarClienteUI.js en la app real).
+function BloqueCalificacionCliente({ nombreCliente, folio }) {
+  const [estrellas, setEstrellas] = useState(0);
+  const [comentario, setComentario] = useState("");
+  const [enviado, setEnviado] = useState(false);
+
+  if (enviado) {
+    return (
+      <p className="text-sm font-medium text-green-700 text-center">
+        ✓ ¡Gracias por tu calificación!
+      </p>
+    );
+  }
+
+  return (
+    <div>
+      <div className="text-center">
+        <h2 className="text-base font-semibold text-gray-800">
+          ¿Cómo fue tu experiencia con <span style={{ color: "#1A3A5C" }}>{nombreCliente}</span>?
+        </h2>
+        <p className="mt-1 text-sm text-gray-400">Orden #{folio}</p>
+
+        <div className="mt-4 flex justify-center gap-2 text-4xl">
+          {[1, 2, 3, 4, 5].map((numero) => (
+            <button
+              key={numero}
+              type="button"
+              onClick={() => setEstrellas(numero)}
+              aria-label={`${numero} estrella${numero > 1 ? "s" : ""}`}
+              style={{ color: numero <= estrellas ? "#C8890A" : "#D1D5DB" }}
+            >
+              ★
+            </button>
+          ))}
+        </div>
+        {estrellas > 0 && (
+          <p className="mt-2 text-sm font-medium" style={{ color: "#C8890A" }}>
+            {ETIQUETAS_ESTRELLAS[estrellas]}
+          </p>
+        )}
+      </div>
+
+      <label htmlFor="calificar-comentario" className="mt-4 block text-sm font-semibold" style={{ color: "#1A3A5C" }}>
+        Comentario <span className="font-normal text-gray-400">(opcional)</span>
+      </label>
+      <textarea
+        id="calificar-comentario"
+        value={comentario}
+        onChange={(e) => setComentario(e.target.value.slice(0, 500))}
+        rows={3}
+        placeholder="Comparte tu experiencia con este cliente (opcional)"
+        className="mt-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400"
+      />
+      <p className="mt-1 text-right text-xs text-gray-400">{comentario.length}/500</p>
+
+      <button
+        type="button"
+        disabled={estrellas === 0}
+        onClick={() => setEnviado(true)}
+        className="mt-3 w-full rounded-md py-3 text-sm font-semibold text-white disabled:opacity-40"
+        style={{ backgroundColor: "#C8890A" }}
+      >
+        ⭐ Enviar calificación
+      </button>
+    </div>
+  );
+}
+
 export default function Constancia() {
   const [carrito, setCarrito] = useState(null);
   const recorrido = useRecorrido();
@@ -261,15 +331,15 @@ export default function Constancia() {
           </div>
         </div>
 
-        {/* La calificación es de quien compra; en el recorrido del proveedor no aplica. */}
-        {!esRecorridoProveedor && (
-          <>
-            <hr className="mb-4 border-gray-200" />
-            <div className="mb-4">
-              <BloqueCalificacion nombreProveedor={PROVEEDOR.nombre} />
-            </div>
-          </>
-        )}
+        {/* Quien compra califica al proveedor; en el recorrido del proveedor, él califica a quien le compró (P-6). */}
+        <hr className="mb-4 border-gray-200" />
+        <div className="mb-4">
+          {esRecorridoProveedor ? (
+            <BloqueCalificacionCliente nombreCliente={ORDEN.cliente.nombre} folio={ORDEN.folio} />
+          ) : (
+            <BloqueCalificacion nombreProveedor={PROVEEDOR.nombre} />
+          )}
+        </div>
 
         <p className="text-xs text-gray-400 text-center mb-4">
           💡 En la app real, guarda esta pantalla como captura de pantalla desde tu celular.
@@ -285,21 +355,21 @@ export default function Constancia() {
           </button>
         </Link>
 
-        {/* Cierre del recorrido del proveedor: única salida hacia la plataforma real. */}
+        {/* Cierre del recorrido del proveedor: primero el ejemplo de la solicitud, después la real. */}
         {esRecorridoProveedor && (
           <div className="pt-5 border-t border-gray-200 text-center">
             <h2 className="text-base font-bold mb-3" style={{ color: "#1A3A5C" }}>
               ¿Te interesa para tu negocio?
             </h2>
-            <a
-              href="https://app.certezamx.com/proveedor/registro"
+            <Link
+              href={recorrido.siguiente}
               className="block w-full py-3 rounded-lg font-bold text-white"
               style={{ backgroundColor: "#1A3A5C" }}
             >
               Solicitar mi alta como proveedor →
-            </a>
+            </Link>
             <p className="text-xs text-gray-400 mt-2 mb-3">
-              Este botón te lleva a la plataforma real de CertezaMX.
+              Primero verás un ejemplo de la solicitud, con datos ficticios.
             </p>
           </div>
         )}

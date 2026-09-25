@@ -198,8 +198,15 @@ export default function RegistroProveedor() {
       ) : (
         <div className="text-center py-6 bg-white rounded-xl shadow-sm border border-gray-100">
           <div className="text-4xl mb-2">✅</div>
-          <p className="font-bold" style={{ color: "#1A3A5C" }}>Solicitud enviada</p>
-          <p className="text-sm text-gray-500 mt-1">Redirigiendo…</p>
+          {/* En el recorrido es un ejemplo: no se envía nada y sigue a la pausa antes de la solicitud real. */}
+          <p className="font-bold" style={{ color: "#1A3A5C" }}>
+            {recorrido ? "Solicitud de ejemplo completa" : "Solicitud enviada"}
+          </p>
+          <p className="text-sm text-gray-500 mt-1">
+            {recorrido
+              ? "No se envió nada. Enseguida te mostramos qué necesitas para la solicitud real…"
+              : "Redirigiendo…"}
+          </p>
         </div>
       )}
     </DemoLayout>

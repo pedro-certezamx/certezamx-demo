@@ -89,7 +89,7 @@ export default function DemoHome() {
         <p className="text-white text-sm mt-1 opacity-80">Encuentra proveedores verificados en México</p>
       </header>
 
-      {recorrido?.esPrimerPaso && <FranjaEjemplo recorrido={recorrido.recorrido} />}
+      {recorrido?.franja && <FranjaEjemplo texto={recorrido.franja} />}
 
       <main className="flex-1 px-4 py-6 max-w-lg mx-auto w-full">
         <div className="mb-6 p-3 rounded-lg bg-blue-50 border border-blue-100">

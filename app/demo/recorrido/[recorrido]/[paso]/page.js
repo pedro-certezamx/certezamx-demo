@@ -1,6 +1,8 @@
 "use client";
 import { notFound } from "next/navigation";
 import { RecorridoProvider } from "../../../../lib/recorridos";
+import RegistroProveedor from "../../../proveedor/registro/page";
+import AntesDeSolicitar from "../../../../components/AntesDeSolicitar";
 import MiCatalogo from "../../../proveedor/catalogo/page";
 import ProveedorDashboard from "../../../proveedor/page";
 import Declarar from "../../../proveedor/declarar/page";
@@ -21,6 +23,8 @@ const PANTALLAS = {
     declarar: Declarar,
     evidencia: Evidencia,
     constancia: Constancia,
+    solicitud: RegistroProveedor,
+    "antes-de-solicitar": AntesDeSolicitar,
   },
   comprador: {
     explorar: DemoHome,

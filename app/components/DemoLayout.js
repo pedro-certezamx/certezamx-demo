@@ -51,17 +51,12 @@ export function BarraDePasos({ pasos, actual }) {
   );
 }
 
-const TEXTO_FRANJA = {
-  comprador: "Ejemplo para quien compra · datos ficticios",
-  proveedor: "Ejemplo para proveedores · datos ficticios",
-};
-
-// Franja en la primera pantalla de cada recorrido; también la usa la portada del comprador.
-export function FranjaEjemplo({ recorrido }) {
+// Franja de ejemplo en los pasos del recorrido que la llevan; también la usa la portada del comprador.
+export function FranjaEjemplo({ texto }) {
   return (
     <div className="px-4 py-2 text-center" style={{ backgroundColor: "#FEF3C7" }}>
       <p className="text-xs font-semibold" style={{ color: "#92400E" }}>
-        {TEXTO_FRANJA[recorrido]}
+        {texto}
       </p>
     </div>
   );
@@ -76,18 +71,22 @@ export default function DemoLayout({ children, paso, totalPasos, titulo, esProve
     "Seguimiento",
   ];
 
-  // Dentro de un recorrido la barra sale de sus pasos; fuera, solo el flujo del comprador la muestra.
+  // Dentro de un recorrido la barra sale de sus pasos (y no se muestra en los pasos fuera de ella);
+  // fuera, solo el flujo del comprador la muestra.
   const recorrido = useRecorrido();
   const barra = recorrido
-    ? { pasos: recorrido.pasos.map((p) => p.etiqueta), actual: recorrido.numero }
+    ? recorrido.enBarra
+      ? { pasos: recorrido.pasos.map((p) => p.etiqueta), actual: recorrido.numero }
+      : null
     : !esProveedor && paso
     ? { pasos: pasosComprador, actual: paso }
     : null;
 
-  // Botón inferior: en /demo vuelve al inicio; en un recorrido lo reinicia, salvo en su primer paso.
+  // Botón inferior: en /demo vuelve al inicio; en un recorrido lo reinicia, salvo en su primer paso
+  // y en los pasos fuera de la barra (la solicitud de ejemplo y la pausa llevan sus propios botones).
   const botonInferior = !recorrido
     ? { href: "/demo", texto: "← Volver al inicio del demo" }
-    : recorrido.esPrimerPaso
+    : recorrido.esPrimerPaso || !recorrido.enBarra
     ? null
     : { href: recorrido.inicio, texto: "↺ Reiniciar el ejemplo" };
 
@@ -106,8 +105,8 @@ export default function DemoLayout({ children, paso, totalPasos, titulo, esProve
       {/* Barra de progreso */}
       {barra && <BarraDePasos pasos={barra.pasos} actual={barra.actual} />}
 
-      {/* Franja del ejemplo, solo en la primera pantalla del recorrido */}
-      {recorrido?.esPrimerPaso && <FranjaEjemplo recorrido={recorrido.recorrido} />}
+      {/* Franja del ejemplo, en los pasos del recorrido que la llevan */}
+      {recorrido?.franja && <FranjaEjemplo texto={recorrido.franja} />}
 
       {/* Contenido */}
       <main className="flex-1 px-4 py-6 max-w-lg mx-auto w-full">
