@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { PROVEEDORES } from "../lib/demoData";
 import { limpiarCarrito } from "../lib/carrito";
+import { limpiarNotificaciones } from "../lib/notificacionesDemo";
 import { useRecorrido } from "../lib/recorridos";
 import { FranjaEjemplo } from "../components/DemoLayout";
 
@@ -66,6 +67,7 @@ export default function DemoHome() {
 
   useEffect(() => {
     limpiarCarrito();
+    limpiarNotificaciones();
   }, []);
 
   const proveedoresFiltrados = PROVEEDORES.filter((p) => {

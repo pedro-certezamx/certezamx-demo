@@ -1,8 +1,10 @@
 "use client";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import DemoLayout from "../../components/DemoLayout";
 import NotificacionSimulada from "../../components/NotificacionSimulada";
 import { ORDEN } from "../../lib/demoData";
+import { notificacionesActivadas } from "../../lib/notificacionesDemo";
 import { useRecorrido } from "../../lib/recorridos";
 
 const TIMELINE = [
@@ -15,6 +17,12 @@ const TIMELINE = [
 
 export default function Estado() {
   const recorrido = useRecorrido();
+  // Elección hecha en Pagar; null mientras se lee, para no mostrar un aviso que luego desaparezca.
+  const [avisosActivos, setAvisosActivos] = useState(null);
+
+  useEffect(() => {
+    setAvisosActivos(notificacionesActivadas());
+  }, []);
 
   return (
     <DemoLayout paso={5} titulo={`Orden ${ORDEN.folio}`}>
@@ -76,13 +84,24 @@ export default function Estado() {
       </div>
 
       {recorrido?.siguiente ? (
-        // En el recorrido del comprador: aviso de la Constancia con el texto real del push.
+        // En el recorrido del comprador: el aviso de la Constancia (texto real del push) solo llega
+        // si permitió las notificaciones en Pagar.
         <>
-          <NotificacionSimulada
-            etiqueta="Notificación simulada · así te avisamos cuando tu Constancia está lista"
-            titulo="Tu constancia está lista"
-            cuerpo={`Tu Constancia de Evidencia Documental de la orden ${ORDEN.folio} ya está lista.`}
-          />
+          {avisosActivos === true && (
+            <NotificacionSimulada
+              etiqueta="Notificación simulada · así te avisamos cuando tu Constancia está lista"
+              titulo="Tu constancia está lista"
+              cuerpo={`Tu Constancia de Evidencia Documental de la orden ${ORDEN.folio} ya está lista.`}
+            />
+          )}
+          {/* "Ahora no", "No permitir" o sin elegir: no llega el aviso de la Constancia. */}
+          {avisosActivos === false && (
+            <div className="p-3 rounded-lg bg-amber-50 border border-amber-100 mb-4">
+              <p className="text-xs text-amber-800">
+                No activaste las notificaciones: tendrás que volver a entrar a tu orden para saber cuándo tu Constancia esté lista.
+              </p>
+            </div>
+          )}
           <Link href={recorrido.siguiente}>
             <button
               className="w-full py-3 rounded-lg font-bold text-white"

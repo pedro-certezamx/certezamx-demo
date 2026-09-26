@@ -2,8 +2,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import DemoLayout from "../../components/DemoLayout";
+import InvitacionNotificaciones from "../../components/InvitacionNotificaciones";
 import { PROVEEDOR, ORDEN } from "../../lib/demoData";
 import { obtenerCarrito } from "../../lib/carrito";
+import { guardarNotificacionesActivadas } from "../../lib/notificacionesDemo";
 import { useRecorrido } from "../../lib/recorridos";
 
 function formatearPrecio(valor) {
@@ -23,6 +25,18 @@ export default function Pagar() {
 
   return (
     <DemoLayout paso={3} titulo="Realiza tu pago">
+      {/* En el recorrido: invitación a activar notificaciones, en el mismo punto que la app real
+          (textos de bloque-notificaciones.js). */}
+      {recorrido && (
+        <InvitacionNotificaciones
+          etiqueta="Recomendado · así sabrás al instante cuando tu Constancia esté lista"
+          titulo="🔔 Te mantenemos informado de tu orden"
+          texto="Te avisamos cuando el proveedor declare recepción de tu pago y cuando tu pedido esté listo."
+          pasoIphone
+          onDecidir={guardarNotificacionesActivadas}
+        />
+      )}
+
       <div className="p-3 rounded-lg bg-blue-50 border border-blue-100 mb-4">
         <p className="text-sm text-blue-800">
           Realiza tu pago directamente a <strong>{PROVEEDOR.nombre}</strong>, por los medios que él acepte.
