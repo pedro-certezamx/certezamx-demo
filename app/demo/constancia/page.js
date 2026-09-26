@@ -155,9 +155,16 @@ export default function Constancia() {
       {/* Header */}
       <header
         style={{ backgroundColor: "#1A3A5C" }}
-        className={esRecorridoProveedor ? "px-4 py-5 flex items-center justify-between" : "px-4 py-5"}
+        // Dentro de un recorrido, mismo encabezado que DemoLayout para que la barra no se mueva.
+        className={recorrido ? "px-4 py-3 flex items-center justify-between" : "px-4 py-5"}
       >
-        <Image src="/Asset_3.png" alt="CertezaMX" width={175} height={52} className="object-contain" />
+        <Image
+          src="/Asset_3.png"
+          alt="CertezaMX"
+          width={recorrido ? 180 : 175}
+          height={recorrido ? 50 : 52}
+          className="object-contain"
+        />
         {esRecorridoProveedor && (
           <span className="text-xs text-white opacity-70 bg-white bg-opacity-10 px-2 py-1 rounded">
             Vista Proveedor

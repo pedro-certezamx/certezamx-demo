@@ -5,8 +5,11 @@ import { useRecorrido } from "../lib/recorridos";
 
 // Barra de pasos arriba de la pantalla; también la usa la Constancia, que no usa este layout.
 export function BarraDePasos({ pasos, actual }) {
+  // Con 6 pasos (recorrido del comprador) las etiquetas largas se juntan en un celular:
+  // menos margen lateral y letra un poco más chica.
+  const compacta = pasos.length > 5;
   return (
-    <div style={{ backgroundColor: "#1A3A5C" }} className="px-4 pb-4">
+    <div style={{ backgroundColor: "#1A3A5C" }} className={compacta ? "px-2 pb-4" : "px-4 pb-4"}>
       <div className="flex items-center justify-between max-w-lg mx-auto">
         {pasos.map((nombre, i) => {
           const num = i + 1;
@@ -39,7 +42,7 @@ export function BarraDePasos({ pasos, actual }) {
               </div>
               <span
                 className="text-xs mt-1"
-                style={{ color: activo ? "white" : "rgba(255,255,255,0.5)", fontSize: "10px" }}
+                style={{ color: activo ? "white" : "rgba(255,255,255,0.5)", fontSize: compacta ? "9px" : "10px" }}
               >
                 {nombre}
               </span>

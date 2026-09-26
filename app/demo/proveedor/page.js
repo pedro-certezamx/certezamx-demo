@@ -42,7 +42,7 @@ export default function ProveedorDashboard() {
           etiqueta="Recomendado · así te enteras al instante de cada orden nueva"
           titulo="🔔 Recibe avisos de tus órdenes al instante"
           texto="Te avisamos cuando entre una orden nueva, cuando el cliente notifique su pago, y cuando debas subir evidencia de entrega."
-          nota="Cada orden nueva te llega por correo y, si activas las notificaciones, también a tu celular. Los avisos de pago y de entrega llegan a tu celular."
+          nota="Cada orden nueva te llega por correo y, si activas las notificaciones, también a tu celular. Los avisos cuando tu cliente notifique su pago y los recordatorios para subir la evidencia de entrega llegan solo a tu celular."
           onDecidir={setAvisosActivos}
         />
       )}
