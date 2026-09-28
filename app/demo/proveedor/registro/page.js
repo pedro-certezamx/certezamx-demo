@@ -74,7 +74,7 @@ export default function RegistroProveedor() {
         </div>
 
         <div className="max-w-xs rounded-md border border-white/20 bg-white/10 px-4 py-2 text-xs text-white/90">
-          <p className="font-semibold">Piloto Nueva York ↔ Puebla y Tlaxcala</p>
+          <p className="font-semibold">Piloto — compradores en México y en el extranjero</p>
           <p className="mt-1">
             Cobertura de proveedores: Puebla Capital y zona conurbada,
             Tlaxcala capital y zona conurbada.
